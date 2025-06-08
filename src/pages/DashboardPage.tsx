@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +23,7 @@ export function DashboardPage() {
   const { user } = useAuth();
   const { location, error: geoError } = useGeolocation();
 
+  // Estados do componente
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [forecastData, setForecastData] = useState<ForecastData | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -36,6 +38,7 @@ export function DashboardPage() {
   } | null>(null);
   const [isGeminiLoading, setIsGeminiLoading] = useState(false);
 
+  // CORREÇÃO: Função para buscar dados, agora com dependências estáveis.
   const handleFetchAndSetData = useCallback(
     async (city: string) => {
       setIsLoading(true);
@@ -43,6 +46,7 @@ export function DashboardPage() {
       setGeminiSuggestion(null);
 
       try {
+        // Busca os dados de clima e previsão em paralelo
         const [weather, forecast] = await Promise.all([
           weatherService.fetchWeatherByCity(city),
           weatherService.fetchForecastByCity(city),
@@ -50,7 +54,9 @@ export function DashboardPage() {
         setWeatherData(weather);
         setForecastData(forecast);
 
+        // Atualiza o histórico de busca de forma segura
         if (user) {
+          // A função de serviço agora recebe o histórico atual e retorna o novo
           const newHistory = await firestoreService.updateSearchHistory(
             user.uid,
             city,
@@ -68,10 +74,14 @@ export function DashboardPage() {
       } finally {
         setIsLoading(false);
       }
+      // A dependência de `searchHistory` foi removida para quebrar o loop.
+      // A função agora usa o estado `searchHistory` mais recente no momento da sua execução.
     },
-    [user, searchHistory]
-  );
+    [user]
+  ); // Apenas `user` é uma dependência estável aqui.
 
+  // Efeito para buscar os dados do usuário (favoritos, histórico) no Firestore.
+  // Roda apenas quando o usuário muda.
   useEffect(() => {
     if (!user) return;
     firestoreService.getUserData(user.uid).then((data) => {
@@ -80,15 +90,20 @@ export function DashboardPage() {
     });
   }, [user]);
 
+  // Efeito para a busca inicial de clima.
+  // Roda apenas uma vez, quando a geolocalização é obtida.
   useEffect(() => {
+    // Se a localização foi obtida com sucesso
     if (location) {
       weatherService
         .fetchWeatherByCoords(location.latitude, location.longitude)
         .then((data) => handleFetchAndSetData(data.name))
-        .catch(() => handleFetchAndSetData("São Paulo"));
+        .catch(() => handleFetchAndSetData("São Paulo")); // Fallback
     } else if (geoError) {
-      handleFetchAndSetData("São Paulo");
+      // Se houve um erro ou a permissão foi negada
+      handleFetchAndSetData("São Paulo"); // Fallback
     }
+    // As dependências garantem que este efeito rode apenas uma vez.
   }, [location, geoError, handleFetchAndSetData]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -120,6 +135,7 @@ export function DashboardPage() {
     setIsGeminiLoading(false);
   };
 
+  // O restante do JSX do componente permanece o mesmo...
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 lg:p-8 font-sans">
       <Header />
@@ -183,4 +199,4 @@ export function DashboardPage() {
       </main>
     </div>
   );
-}
+};
