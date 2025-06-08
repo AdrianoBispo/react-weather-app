@@ -9,7 +9,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  FacebookAuthProvider,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -55,13 +54,10 @@ export function AuthForm() {
     }
   };
 
-  const handleSocialLogin = async (providerType: "google" | "facebook") => {
-    const provider =
-      providerType === "google"
-        ? new GoogleAuthProvider()
-        : new FacebookAuthProvider();
+  const handleGoogleLogin = async () => {
+    const googleProvider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, googleProvider);
     } catch (err) {
       setError("Falha ao autenticar com o provedor.");
     }
@@ -145,16 +141,9 @@ export function AuthForm() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => handleGoogleLogin()}
             >
               Google
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => handleSocialLogin("facebook")}
-            >
-              Facebook
             </Button>
           </div>
 
