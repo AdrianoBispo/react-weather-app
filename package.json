@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^5.1.0",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/vite": "^4.1.8",
@@ -26,11 +27,10 @@
     "react-dom": "^19.1.0",
     "react-geolocated": "^4.3.0",
     "react-hook-form": "^7.57.0",
-    "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.8",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.25.56"
+    "zod": "^3.26.0-canary.20250606T065527"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
