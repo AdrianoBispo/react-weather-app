@@ -1,4 +1,6 @@
 # 🌦️ React Weather App | Previsão do Tempo Inteligente
+https://github.com/user-attachments/assets/7c54b816-3b03-4810-8be0-ecca9c38f73c
+
 O **React Weather App** é uma aplicação web moderna e responsiva para monitoramento climático, construída com as mais recentes tecnologias do ecossistema React. A aplicação permite aos usuários obter previsões do tempo em tempo real, salvar cidades favoritas e receber sugestões inteligentes baseadas no clima, graças à integração com a API Gemini do Google.
 
 ## 📂 Estrutura do Projeto
